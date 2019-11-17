@@ -78,20 +78,21 @@ app.post("/:url(*)", function(req, res) {
     db.close();
   });
 });
-app.use(bodyParser.urlencoded({extended: false}));
 
-app.post("/:now", function(req, res) {
-  console.log("IN");
+app.get("/:now", function(req, res) {
+  //console.log("IN");
   mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true }, function(err,db) {
     if (err) {
       console.log("cannot connect to database second time");
     } else {
-      let collections = db.collection("links");
-      
-      let val = req.body;
+      let collections = db.collection("links"); 
+      let val = req.params.now;
       console.log(val);
-      collections.findOne({ short: "https://url-shortener99.glitch.me/" + val.toString() },function(err, data) {
-          if (data != null) {
+      var shortUrl="https://url-shortener99.glitch.me/".toString() + val.toString();
+      //console.log(shortUrl);
+      collections.findOne({ short:shortUrl },function(err, data) {
+        //console.log(data);  
+        if (data != null) {
             //console.log(data);
             res.redirect(data.original_url);
           } else {
