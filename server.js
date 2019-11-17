@@ -8,6 +8,8 @@ var validUrl = require("valid-url");
 var count = 0;
 var cors = require("cors");
 
+var bodyParser = require('body-parser')
+
 var app = express();
 
 // Basic Configuration
