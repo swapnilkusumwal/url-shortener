@@ -33,7 +33,7 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/api/shorturl/new/:url(*)",function(req,res){
+app.post("/api/shorturl/new/:url(*)",function(req,res){
   mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true},function(err,db){
     if(err){
       console.log("Error in connecting to database");
@@ -69,7 +69,7 @@ app.get("/api/shorturl/new/:url(*)",function(req,res){
   });
 });
 
-app.get("/:now",function(req,res){
+app.post("/api/shorturl/:now",function(req,res){
   mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true},function(err,db){
      if(err){
        console.log("cannot connect to database second time");
@@ -81,7 +81,7 @@ app.get("/:now",function(req,res){
         
         collections.findOne({short:"https://url-shortener99.glitch.me/"+val.toString()},function(err,data){
           if(data!=null){
-            res.redirect(data.url);
+            res.redirect(data.original_url);
           }
           else
             {
