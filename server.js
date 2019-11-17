@@ -34,18 +34,45 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.get("/new/:url(*)",function(req,res){
-  mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true},function(err,data){
+  mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true},function(err,db){
     if(err){
       console.log("Error in connecting to database");
     }
     else
       {
-        let collections=data.collections('links');
         let url=req.params.url;
-        let host=req.get('host')+"/";
+        
+        if(validUrl.isUri(url)){
+       
+          let collections=db.collections('links');
+          var obj={
+            original_url:url,
+            short:"https://url-shortener99.glitch.me/"+count.toString()
+          };
+          count++;
+          collections.insert(obj,function(err,data){
+            if(err)
+              {
+                console.log("error inserting in database");
+              }
+            else
+              db.close();
+          });
+        }
+        else
+          {
+            res.send({
+              error:"The URL format is wrong kindly recheck the url and POST again"
+            });
+          }
       }
   });
 });
+
+app.get("/new",function(err,data){
+  mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true}.function(err));
+})
+
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
