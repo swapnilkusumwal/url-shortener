@@ -2,8 +2,7 @@
 var express = require("express");
 var mongo = require("mongodb");
 var mongoose = require("mongoose");
-//var shortid = require('shortid');
-//shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&');
+
 var validUrl = require("valid-url");
 var count = 0;
 var cors = require("cors");
@@ -39,7 +38,7 @@ app.get("/api/hello", function(req, res) {
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.post("/:url(*)", function(req, res) {  
-     console.log("connected to database1123");
+     //console.log("connected to database");
   mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }, function(err,db) {
     if (err) {
       console.log("Error in connecting to database");
@@ -53,21 +52,20 @@ app.post("/:url(*)", function(req, res) {
         var shortUrl="https://url-shortener99.glitch.me/" + count.toString();
         var obj = {
           original_url: url,
-          short: shortUrl
+          short_url: shortUrl
         };
         count++;
         //res.send(JSON.stringify(obj));
         res.json({
           original_url:url,
-          short:shortUrl
+          short_url:shortUrl
         });
-        
-        console.log(shortUrl);
+        //console.log(shortUrl);
         collections.insertOne(obj, function(err, data) {
           if (err) {
             console.log("error inserting in database");
           }
-          console.log("INSERTED");
+          //console.log("INSERTED");
         });
       } else {
         res.send({
@@ -87,16 +85,16 @@ app.get("/:now", function(req, res) {
     } else {
       let collections = db.collection("links"); 
       let val = req.params.now;
-      console.log(val);
+      //console.log(val);
       var shortUrl="https://url-shortener99.glitch.me/".toString() + val.toString();
       //console.log(shortUrl);
-      collections.findOne({ short:shortUrl },function(err, data) {
+      collections.findOne({ short_url:shortUrl },function(err, data) {
         //console.log(data);  
         if (data != null) {
             //console.log(data);
             res.redirect(data.original_url);
           } else {
-            console.log(val);
+            //console.log(val);
             console.log("short url not found in database");
           }
         });
