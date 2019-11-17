@@ -32,7 +32,7 @@ app.get("/", function(req, res) {
 app.get("/api/hello", function(req, res) {
   res.json({ greeting: "hello API" });
 });
-/*
+
 app.post("/:url(*)", function(req, res) {  
       console.log("connected to database1123");
   mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }, function(err,db) {
@@ -54,7 +54,6 @@ app.post("/:url(*)", function(req, res) {
           if (err) {
             console.log("error inserting in database");
           }
-          db.close();
         });
       } else {
         res.send({
@@ -62,6 +61,7 @@ app.post("/:url(*)", function(req, res) {
         });
       }
     }
+    db.close();
   });
 });
 
@@ -82,85 +82,16 @@ app.post("/api/shorturl/:now", function(req, res) {
           } else {
             console.log("short url not found in database");
           }
-          db.close();
         }
       );
-    }
-  });
-});
-*/
-
-app.post("/api/shorturl/new",function(req,res){
-  mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true},function(err,db){
-    if(err){
-      console.log("error connecting to database");
-    }
-    let collections=db.collection('links');
-    let url=req.params.url;
-    let host=req.get('host')+"/";
-    
-    let generateLink=function(db,callback){
-      if(validUrl.isValidUri(url)){
-        collections.findOne({url:url},{short:1 ,_id:0},function(err,data){
-          if(err)
-            {
-              console.log("error ",err);
-            }
-          else
-            {
-              if(data!=null)
-                {
-                   res.json({
-                      original_url:url,
-                      short_url:host+data.short
-                   }); 
-                }
-              else
-                {
-                    //let shortCode=shortid.generate();
-                    let obj={url:url,short:count.toString()};
-                    count++;
-                    collections.insert(obj);
-                    res.send(JSON.stringify(obj));
-                }
-            }
-        });
-      }
-      else
-        {
-          res.json({
-            error:"NOT A VALID URI"
-          });
-        }
-      generateLink(db, function(){
-        db.close();
-      });
-    }
-  });
-  
-});
-
-app.post("/:short",function(req,res){
-  mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true},function(err,db){
-     if(err){
-       console.log("error connecting ",err);
-     } 
-    else{
-      let collections=db.collection("link");
-      let short=req.param.short;
-      collections.findOne({short:short},{url:1,_id:0},function(err,data){
-        if(data!=null){
-          res.redirect(data.url);
-        }
-        else
-          res.json({
-            error:"No such url exists in database"
-          });
-      });
     }
     db.close();
   });
 });
+
+
+
+
 
 app.listen(port, function() {
   console.log("Node.js listening ...");
