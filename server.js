@@ -34,10 +34,10 @@ app.get("/", function(req, res) {
 app.get("/api/hello", function(req, res) {
   res.json({ greeting: "hello API" });
 });
+
+
 app.use(bodyParser.urlencoded({extended: false}));
 
-
-  
 app.post("/:url(*)", function(req, res) {  
      console.log("connected to database1123");
   mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }, function(err,db) {
@@ -56,16 +56,18 @@ app.post("/:url(*)", function(req, res) {
           short: shortUrl
         };
         count++;
-        console.log(shortUrl);
         //res.send(JSON.stringify(obj));
         res.json({
           original_url:url,
-          short:"https://url-shortener99.glitch.me/" + count.toString()
+          short:shortUrl
         });
-        collections.insert(obj, function(err, data) {
+        
+        console.log(shortUrl);
+        collections.insertOne(obj, function(err, data) {
           if (err) {
             console.log("error inserting in database");
           }
+          console.log("INSERTED");
         });
       } else {
         res.send({
@@ -76,8 +78,10 @@ app.post("/:url(*)", function(req, res) {
     db.close();
   });
 });
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.post("/:now", function(req, res) {
+  console.log("IN");
   mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true }, function(err,db) {
     if (err) {
       console.log("cannot connect to database second time");
