@@ -2,8 +2,8 @@
 var express = require("express");
 var mongo = require("mongodb");
 var mongoose = require("mongoose");
-var shortid = require('shortid');
-shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&');
+//var shortid = require('shortid');
+//shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&');
 var validUrl = require("valid-url");
 var count = 0;
 var cors = require("cors");
@@ -90,7 +90,7 @@ app.post("/api/shorturl/:now", function(req, res) {
 });
 */
 
-app.post("/new/:url(*)",function(req,res){
+app.post("/api/shorturl/new",function(req,res){
   mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true},function(err,db){
     if(err){
       console.log("error connecting to database");
@@ -122,7 +122,6 @@ app.post("/new/:url(*)",function(req,res){
                     count++;
                     collections.insert(obj);
                     res.send(JSON.stringify(obj));
-                      
                 }
             }
         });
@@ -133,16 +132,35 @@ app.post("/new/:url(*)",function(req,res){
             error:"NOT A VALID URI"
           });
         }
+      generateLink(db, function(){
+        db.close();
+      });
     }
   });
-  generateLink(db,function()){
-                 
-   }
+  
 });
 
-
-
-
+app.post("/:short",function(req,res){
+  mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true},function(err,db){
+     if(err){
+       console.log("error connecting ",err);
+     } 
+    else{
+      let collections=db.collection("link");
+      let short=req.param.short;
+      collections.findOne({short:short},{url:1,_id:0},function(err,data){
+        if(data!=null){
+          res.redirect(data.url);
+        }
+        else
+          res.json({
+            error:"No such url exists in database"
+          });
+      });
+    }
+    db.close();
+  });
+});
 
 app.listen(port, function() {
   console.log("Node.js listening ...");
