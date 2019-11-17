@@ -33,7 +33,7 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/api/shorturl")
+app.get("/new/:")
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
