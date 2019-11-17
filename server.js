@@ -2,10 +2,10 @@
 var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');  
-var shortid = require('shortid');
-shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&');
+//var shortid = require('shortid');
+//shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&');
 var validUrl = require('valid-url');
-
+var count=0;
 var cors = require('cors');
 
 var app = express();
@@ -33,7 +33,19 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/new/:")
+app.get("/new/:url(*)",function(req,res){
+  mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true},function(err,data){
+    if(err){
+      console.log("Error in connecting to database");
+    }
+    else
+      {
+        let collections=data.collections('links');
+        let url=req.params.url;
+        let host=req.get('host')+"/";
+      }
+  });
+});
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
