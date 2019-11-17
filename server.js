@@ -33,15 +33,16 @@ app.get("/api/hello", function(req, res) {
   res.json({ greeting: "hello API" });
 });
 
-app.post("/api/shorturl/:url(*)", function(req, res) {  
-      console.log("connected to database1123");
+app.post("/api/shorturl/new/:url(*)", function(req, res) {  
+  
   mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }, function(err,db) {
     if (err) {
       console.log("Error in connecting to database");
     } else {
       let url = req.params.url;
-
+      //console.log("HERE");
       if (validUrl.isUri(url)) {
+        //console.log("YO");
         let collections = db.collection("links");
         var obj = {
           original_url: url,
