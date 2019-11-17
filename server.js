@@ -5,7 +5,6 @@ var mongoose = require('mongoose');
 
 //var shortid = require('shortid');
 //shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&');
-//var validUrl = require('valid-url');
 
 var cors = require('cors');
 
@@ -34,6 +33,7 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("")
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
