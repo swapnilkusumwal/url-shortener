@@ -46,6 +46,7 @@ app.post("/api/shorturl/new/:url(*)", function(req, res) {
           original_url: url,
           short: "https://url-shortener99.glitch.me/" + count.toString()
         };
+        console.log(url);
         count++;
         res.send(JSON.stringify(obj));
         
@@ -65,10 +66,7 @@ app.post("/api/shorturl/new/:url(*)", function(req, res) {
 });
 
 app.post("/api/shorturl/:now", function(req, res) {
-  mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true }, function(
-    err,
-    db
-  ) {
+  mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true }, function(err,db) {
     if (err) {
       console.log("cannot connect to database second time");
     } else {
