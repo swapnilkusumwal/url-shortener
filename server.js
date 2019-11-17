@@ -2,9 +2,9 @@
 var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');  
-
-//var shortid = require('shortid');
-//shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&');
+var shortid = require('shortid');
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&');
+var validUrl = require('valid-url');
 
 var cors = require('cors');
 

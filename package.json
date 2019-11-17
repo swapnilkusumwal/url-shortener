@@ -8,10 +8,12 @@
 	},
 	"dependencies": {
 		"express": "^5.0.0-alpha.2",
-		"mongodb": "^2.2.5",
-		"mongoose": "^4.5.7",
-		"cors": "^2.8.1",
-		"body-parser": "^1.15.2"
+		"mongodb": "^3.3.4",
+		"mongoose": "^5.7.11",
+		"cors": "^2.8.5",
+		"body-parser": "^1.19.0",
+    "valid-url": "^1.0.9",
+    "shortid": "^2.2.15"
 	},
 	"engines": {
 		"node": "4.4.5"
