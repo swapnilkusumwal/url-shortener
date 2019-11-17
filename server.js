@@ -33,7 +33,7 @@ app.get("/api/hello", function(req, res) {
   res.json({ greeting: "hello API" });
 });
 
-app.post("/api/shorturl/new/:url(*)", function(req, res) {  
+app.post("/new/", function(req, res) {  
   
   mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }, function(err,db) {
     if (err) {
@@ -77,6 +77,8 @@ app.post("/api/shorturl/:now", function(req, res) {
       collections.findOne(
         { short: "https://url-shortener99.glitch.me/" + val.toString() },
         function(err, data) {
+          console.log(data);
+          console.log("https://url-shortener99.glitch.me/" + val.toString());
           if (data != null) {
             console.log(data);
             res.redirect(data.original_url);
