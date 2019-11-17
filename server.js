@@ -72,7 +72,7 @@ app.get("/api/shorturl/new/:url(*)",function(req,res){
 app.get("/:now",function(req,res){
   mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true},function(err,db){
      if(err){
-       console.log("cannot connect to database seond time");
+       console.log("cannot connect to database second time");
      }
     else
       {
