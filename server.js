@@ -2,8 +2,8 @@
 var express = require("express");
 var mongo = require("mongodb");
 var mongoose = require("mongoose");
-//var shortid = require('shortid');
-//shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&');
+var shortid = require('shortid');
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&');
 var validUrl = require("valid-url");
 var count = 0;
 var cors = require("cors");
@@ -91,7 +91,53 @@ app.post("/api/shorturl/:now", function(req, res) {
 */
 
 app.post("/new/:url(*)",function(req,res){
-  mongoose.connect(process.env.MONGO_URL,{})
+  mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true},function(err,db){
+    if(err){
+      console.log("error connecting to database");
+    }
+    let collections=db.collection('links');
+    let url=req.params.url;
+    let host=req.get('host')+"/";
+    
+    let generateLink=function(db,callback){
+      if(validUrl.isValidUri(url)){
+        collections.findOne({url:url},{short:1 ,_id:0},function(err,data){
+          if(err)
+            {
+              console.log("error ",err);
+            }
+          else
+            {
+              if(data!=null)
+                {
+                   res.json({
+                      original_url:url,
+                      short_url:host+data.short
+                   }); 
+                }
+              else
+                {
+                    //let shortCode=shortid.generate();
+                    let obj={url:url,short:count.toString()};
+                    count++;
+                    collections.insert(obj);
+                    res.send(JSON.stringify(obj));
+                      
+                }
+            }
+        });
+      }
+      else
+        {
+          res.json({
+            error:"NOT A VALID URI"
+          });
+        }
+    }
+  });
+  generateLink(db,function()){
+                 
+   }
 });
 
 
