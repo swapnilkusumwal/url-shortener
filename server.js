@@ -32,17 +32,16 @@ app.get("/", function(req, res) {
 app.get("/api/hello", function(req, res) {
   res.json({ greeting: "hello API" });
 });
-
-app.post("/new/", function(req, res) {  
-  
+/*
+app.post("/:url(*)", function(req, res) {  
+      console.log("connected to database1123");
   mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }, function(err,db) {
     if (err) {
       console.log("Error in connecting to database");
     } else {
       let url = req.params.url;
-      //console.log("HERE");
+
       if (validUrl.isUri(url)) {
-        //console.log("YO");
         let collections = db.collection("links");
         var obj = {
           original_url: url,
@@ -77,8 +76,6 @@ app.post("/api/shorturl/:now", function(req, res) {
       collections.findOne(
         { short: "https://url-shortener99.glitch.me/" + val.toString() },
         function(err, data) {
-          console.log(data);
-          console.log("https://url-shortener99.glitch.me/" + val.toString());
           if (data != null) {
             console.log(data);
             res.redirect(data.original_url);
@@ -91,6 +88,15 @@ app.post("/api/shorturl/:now", function(req, res) {
     }
   });
 });
+*/
+
+app.post("/new/:url(*)",function(req,res){
+  mongoose.connect(process.env.MONGO_URL,{})
+});
+
+
+
+
 
 app.listen(port, function() {
   console.log("Node.js listening ...");
