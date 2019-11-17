@@ -34,22 +34,29 @@ app.get("/", function(req, res) {
 app.get("/api/hello", function(req, res) {
   res.json({ greeting: "hello API" });
 });
+app.use(bodyParser.urlencoded({extended: false}));
 
+
+  
 app.post("/:url(*)", function(req, res) {  
      console.log("connected to database1123");
   mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }, function(err,db) {
     if (err) {
       console.log("Error in connecting to database");
     } else {
-      let url = req.params.url;
-      console.log(url);
+      //var a=req.body.url;
+      //console.log(a);
+      let url = req.body.url;
+      //console.log(url);
       if (validUrl.isUri(url)) {
         let collections = db.collection("links");
+        var shortUrl="https://url-shortener99.glitch.me/" + count.toString();
         var obj = {
           original_url: url,
-          short: "https://url-shortener99.glitch.me/" + count.toString()
+          short: shortUrl
         };
         count++;
+        console.log(shortUrl);
         //res.send(JSON.stringify(obj));
         res.json({
           original_url:url,
@@ -76,8 +83,9 @@ app.post("/:now", function(req, res) {
       console.log("cannot connect to database second time");
     } else {
       let collections = db.collection("links");
-      let val = req.params.now;
-
+      
+      let val = req.body;
+      console.log(val);
       collections.findOne({ short: "https://url-shortener99.glitch.me/" + val.toString() },function(err, data) {
           if (data != null) {
             //console.log(data);
