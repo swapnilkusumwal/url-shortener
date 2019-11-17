@@ -33,7 +33,8 @@ app.get("/api/hello", function(req, res) {
   res.json({ greeting: "hello API" });
 });
 
-app.post("/api/shorturl/new/:url(*)", function(req, res) {
+app.post("/api/shorturl/new/:url(*)", function(req, res) {  
+      console.log("connected to database1123");
   mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }, function(err,db) {
     if (err) {
       console.log("Error in connecting to database");
@@ -46,7 +47,6 @@ app.post("/api/shorturl/new/:url(*)", function(req, res) {
           original_url: url,
           short: "https://url-shortener99.glitch.me/" + count.toString()
         };
-        console.log(url);
         count++;
         res.send(JSON.stringify(obj));
         
@@ -66,7 +66,7 @@ app.post("/api/shorturl/new/:url(*)", function(req, res) {
 });
 
 app.post("/api/shorturl/:now", function(req, res) {
-  mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true }, function(err,db) {
+  mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true }, function(  err,db) {
     if (err) {
       console.log("cannot connect to database second time");
     } else {
@@ -77,6 +77,7 @@ app.post("/api/shorturl/:now", function(req, res) {
         { short: "https://url-shortener99.glitch.me/" + val.toString() },
         function(err, data) {
           if (data != null) {
+            console.log(data);
             res.redirect(data.original_url);
           } else {
             console.log("short url not found in database");
