@@ -33,7 +33,7 @@ app.get("/api/hello", function(req, res) {
   res.json({ greeting: "hello API" });
 });
 
-app.post("/api/shorturl/new/:url(*)", function(req, res) {  
+app.post("/api/shorturl/:url(*)", function(req, res) {  
       console.log("connected to database1123");
   mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }, function(err,db) {
     if (err) {
