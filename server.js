@@ -33,7 +33,7 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/new/:url(*)",function(req,res){
+app.get("/api/shorturl/new/:url(*)",function(req,res){
   mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true},function(err,db){
     if(err){
       console.log("Error in connecting to database");
@@ -69,9 +69,29 @@ app.get("/new/:url(*)",function(req,res){
   });
 });
 
-app.get("/new",function(err,data){
-  mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true}.function(err));
-})
+app.get("/:now",function(req,res){
+  mongoose.connect(process.env.MONGO_URL,{useNewUrlParser:true},function(err,db){
+     if(err){
+       console.log("cannot connect to database seond time");
+     }
+    else
+      {
+        let collections=db.collections("links");
+        let val=req.params.now;
+        
+        collections.findOne({short:"https://url-shortener99.glitch.me/"+val.toString()},function(err,data){
+          if(data!=null){
+            res.redirect(data.url);
+          }
+          else
+            {
+              console.log("short url not found in database");
+            }
+          db.close();
+        });
+      }
+  });
+});
 
 
 app.listen(port, function () {
