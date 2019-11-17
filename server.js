@@ -34,7 +34,7 @@ app.get("/api/hello", function(req, res) {
 });
 
 app.post("/api/shorturl/new/:url(*)", function(req, res) {
-  mongoose.connect(process.env.MONGO_URL, { useUnifiedTopology: true }, function(err,db) {
+  mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }, function(err,db) {
     if (err) {
       console.log("Error in connecting to database");
     } else {
@@ -65,7 +65,7 @@ app.post("/api/shorturl/new/:url(*)", function(req, res) {
 });
 
 app.post("/api/shorturl/:now", function(req, res) {
-  mongoose.connect(process.env.MONGO_URL, { useUnifiedTopology: true }, function(
+  mongoose.connect(process.env.MONGO_URL,{ useNewUrlParser: true }, function(
     err,
     db
   ) {
