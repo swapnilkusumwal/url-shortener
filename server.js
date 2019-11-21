@@ -2,11 +2,11 @@
 var express = require("express");
 var mongo = require("mongodb");
 var mongoose = require("mongoose");
-
+var shortId = require("shortid");
 var validUrl = require("valid-url");
 var count = 0;
 var cors = require("cors");
-
+//can change cout to shortid
 var bodyParser = require('body-parser')
 
 var app = express();
@@ -46,10 +46,11 @@ app.post("/:url(*)", function(req, res) {
       //var a=req.body.url;
       //console.log(a);
       let url = req.body.url;
+      var short = shortId.generate();
       //console.log(url);
       if (validUrl.isUri(url)) {
         let collections = db.collection("links");
-        var shortUrl="https://url-shortener99.glitch.me/" + count.toString();
+        var shortUrl="https://url-shortener99.glitch.me/" + short;
         var obj = {
           original_url: url,
           short_url: shortUrl
@@ -102,7 +103,7 @@ app.get("/:now", function(req, res) {
     db.close();
   });
 });
-
+app.get("api/exercise/users")
 app.listen(port, function() {
   console.log("Node.js listening ...");
 });
